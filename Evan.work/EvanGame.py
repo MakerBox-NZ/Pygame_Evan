@@ -20,13 +20,17 @@ class Player(pygame.sprite.Sprite):
         
         self.rect = self.image.get_rect()
 
-    def comtrol(self, x, y):
+    def control(self, x, y):
         #controlplayermovement
         self.momentumX += x
         self.momentumY += y
 
     def update(self):
         #updatespriteposition
+        currentX = self.rect.x
+        nextX = currentX + self.momentumX
+        self.rect.x = nextX
+
         currentY = self.rect.y
         nextY = currentY + self.momentumY
         self.rect.y = nextY
@@ -78,9 +82,29 @@ while main == True:
             if event.key == ord('q'):
                 pygame.quit()
                 sys.exit()
-                main = False    
+                main = False
+            if event.key == pygame.K_LEFT:
+                print('left stop')
+                player.control(movesteps, 0)
+            if event.key == pygame.K_RIGHT:
+                print('right stop')
+                player.control(-movesteps, 0)
+                if event.key == pygame.K_UP:
+                    print('jump stop')
+
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    print('left')
+                    player.control(movesteps, 0)
+                if event.keyt == pygame.K_RIGHT:
+                    print('right')
+                    player.control(movesteps, 0)
+                if event.key == pygeme.K_UP:
+                    print('jump')
 
         screen.fill((66, 244, 217))
+        player.update() #update player position
         movingsprites.draw(screen)  #draw player
 
         pygame.display.flip()
