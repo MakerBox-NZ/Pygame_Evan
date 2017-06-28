@@ -1,1 +1,6 @@
-print("pretend like there is a game here")
+Python 3.6.1 (v3.6.1:69c0db5, Mar 21 2017, 17:54:52) [MSC v.1900 32 bit (Intel)] on win32
+Type "copyright", "credits" or "license()" for more information.
+>>> import random
+>>> player = random.randint(1,6)
+>>> computer = random.randint (1,6)
+>>> 
