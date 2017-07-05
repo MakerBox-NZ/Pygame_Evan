@@ -25,7 +25,11 @@ class Player(pygame.sprite.Sprite):
         self.momentumX += x
         self.momentumY += y
 
-    def update(self):
+        def update(self, enemy_list):
+
+            self.score = 0 #set score
+
+    def update(self, enemy_list):
         #updatespriteposition
         currentX = self.rect.x
         nextX = currentX + self.momentumX
@@ -34,6 +38,36 @@ class Player(pygame.sprite.Sprite):
         currentY = self.rect.y
         nextY = currentY + self.momentumY
         self.rect.y = nextY
+
+        #collisions
+        enemy_hit_list = pygame.sprite.spritecollide(self, enemy_list, False)
+        for enemy in enemy_hit_list:
+            self.score -= 1
+            print(self.score)
+
+class Enemy (pygame.sprite.Sprite):
+    #spawn enemy
+    def __init__(self,x,y,img):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(os.path.join('images', img))
+        self.image.convert_alpha()
+        self.image.set_colorkey(alpha)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.counter = 0
+
+    def move(self):
+        #enemy movement
+        if self.counter >= 0 and self.counter <= 30:
+            self.rect.x += 2
+        elif self.counter >= 30 and self.counter <= 60:
+            self.rect.x -= 2
+        else:
+            self.counter = 0
+            print('reset')
+
+        self.counter += 1
              
 
 
@@ -63,6 +97,12 @@ player.rect.y = 0
 movingsprites = pygame.sprite.Group()
 movingsprites.add(player)
 movesteps = 10  #how fast to move
+
+#enemy code
+enemy = Enemy(100,50, 'enemy.png')
+enemy_list = pygame.sprite.Group()
+enemy_list.add(enemy)
+
 
              
 
@@ -104,8 +144,11 @@ while main == True:
                     print('jump')
 
         screen.fill((66, 244, 217))
-        player.update() #update player position
+        player.update(enemy_list) #update player position
         movingsprites.draw(screen)  #draw player
+
+        enemy_list.draw(screen) #refresh enemies
+        enemy.move() #move sprite
 
         pygame.display.flip()
         clock.tick(fps)
