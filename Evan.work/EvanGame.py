@@ -1,12 +1,34 @@
 #!/usr/env python3
 #by evan
-#thanks to my cake and all the snorlaxxians who helped
+#thanks to my cake
 import pygame 
 import sys
 import os
 
 '''OBJECTS'''
 #put classes and functions here
+class Platform(pygame.sprite.Sprite):
+    #x location, y location, imgw, imgh, img file)
+    def __init__(self,xloc,yloc,imgw, imgh, img):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface([imgw, imgh])
+        self.image.convert_alpha()
+        self.image.set_colorkey(alpha)
+        self.blockpic = pygame.image.load(img).convert()
+        self.rect = self.image.get_rect()
+        self.rect.y = yloc
+        self.rect.x = xloc
+
+        #paint image into blocks
+        self.image.blit(self.blockpic,(0,0),(0,0,imgw,imgh))
+
+    def level1():
+        #create level 1
+        platform_list = pygame.sprite.Group()
+        block = Platform(0, 591, 768, 118,os.path.join('images','block0.png'))
+
+        return platform_list #at end of function level1
+ 
 class Player(pygame.sprite.Sprite):
     #spawn a player
     def __init__(self):
@@ -93,6 +115,9 @@ main = True
 
 screen = pygame.display.set_mode([screenX, screenY])
 
+backdropRect = screen.get_rect()
+
+platform_list = Platform.level1() #set stage to level 1
 
 player = Player()
 player.rect.x = 0
@@ -147,6 +172,7 @@ while main == True:
                     print('jump')
 
         screen.fill((66, 244, 217))
+        platform_list.draw(screen) #draw platforms on screen
         player.update(enemy_list) #update player position
         movingsprites.draw(screen)  #draw player
 
