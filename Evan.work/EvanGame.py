@@ -14,6 +14,9 @@ class Player(pygame.sprite.Sprite):
 
         self.momentumX = 0
         self.momentumY = 0
+
+        self.score = 0
+        
         self.image = pygame.image.load(os.path.join('images', 'hero.png')).convert()
         self.image.convert_alpha() #optimise for alpha
         self.image.set_colorkey(alpha) #set alpha
