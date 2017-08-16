@@ -25,8 +25,8 @@ class Platform(pygame.sprite.Sprite):
     def level1():
         #create level 1
         platform_list = pygame.sprite.Group()
-        block = Platform(0, 591, 768, 118,os.path.join('images','block0.png'))
-
+        block = Platform(0, 542, 768, 118,os.path.join('images','block0.png'))
+        platform_list.add(block)                                    
         return platform_list #at end of function level1
  
 class Player(pygame.sprite.Sprite):
@@ -69,6 +69,13 @@ class Player(pygame.sprite.Sprite):
         for enemy in enemy_hit_list:
             self.score -= 1
             print(self.score)
+
+    def gravity(self):
+        self.momentumY += 3.2 #how fast player fall
+
+        if self.rect.y > 960 and self.momentumY  >= 0:
+            self.momentumY = 0
+            self.rect.y = screenY-20
 
 class Enemy (pygame.sprite.Sprite):
     #spawn enemy
@@ -161,24 +168,25 @@ while main == True:
                     print('jump stop')
 
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    print('left')
-                    player.control(movesteps, 0)
-                if event.keyt == pygame.K_RIGHT:
-                    print('right')
-                    player.control(movesteps, 0)
-                if event.key == pygeme.K_UP:
-                    print('jump')
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                print('left')
+                player.control(-movesteps, 0)
+            if event.key == pygame.K_RIGHT:
+                print('right')
+                player.control(movesteps, 0)
+            if event.key == pygame.K_UP:
+                print('jump')
 
-        screen.fill((66, 244, 217))
-        platform_list.draw(screen) #draw platforms on screen
-        player.update(enemy_list) #update player position
-        movingsprites.draw(screen)  #draw player
+    screen.fill((66, 244, 217))
+    platform_list.draw(screen) #draw platforms on screen
+    player.gravity() #check gravity
+    player.update(enemy_list) #update player position
+    movingsprites.draw(screen)  #draw player
 
-        enemy_list.draw(screen) #refresh enemies
-        enemy.move() #move sprite
+    enemy_list.draw(screen) #refresh enemies
+    enemy.move() #move sprite
 
-        pygame.display.flip()
-        clock.tick(fps)
-        
+    pygame.display.flip()
+    clock.tick(fps)
+    
