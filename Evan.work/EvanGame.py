@@ -4,9 +4,16 @@
 import pygame 
 import sys
 import os
+import pygame.freetype #load fonts
 
 '''OBJECTS'''
 #put classes and functions here
+
+def stats(score):
+    #display text, 1, color (rgb)
+    text_score = myfont.render("score: "+str(score), 1, (250,147,248))
+    screen.blit(text_score, (4, 4))
+
 class Platform(pygame.sprite.Sprite):
     #x location, y location, imgw, imgh, img file)
     def __init__(self,xloc,yloc,imgw, imgh, img):
@@ -42,6 +49,7 @@ class Player(pygame.sprite.Sprite):
         self.jump_delta = 6
 
         self.score = 0
+        self.damage = 0 #player is hit
         
         self.image = pygame.image.load(os.path.join('images', 'hero.png')).convert()
         self.image.convert_alpha() #optimise for alpha
@@ -78,9 +86,24 @@ class Player(pygame.sprite.Sprite):
     
         #collisions
         enemy_hit_list = pygame.sprite.spritecollide(self, enemy_list, False)
-        for enemy in enemy_hit_list:
+
+        '''for enemy in enemy_hit_list:
             self.score -= 1
-            print(self.score)
+            print(self.score)'''
+
+        if self.damage == 0:
+            for enemy in enemy_hit_list:
+                if not self.rect.contains(enemy):
+                    self.damage = self.rect.colliderect(enemy)
+                    print(self.score)
+
+        if self.damage == 1:
+            idx = self.rect.collidelist(enemy_hit_list)
+            if idx == -1:
+                self.damage = 0 #set damage back to 0
+                self.score -= 1 #subtract 1 hp
+        
+        
         block_hit_list = pygame.sprite.spritecollide(self, platform_list, False)
         if self.momentumX > 0:
             for block in block_hit_list:
@@ -145,6 +168,11 @@ fps = 40
 afps = 4
 clock = pygame.time.Clock()
 pygame.init()
+pygame.font.init() #start free thype
+
+font_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "FONTS", "amazdoom.ttf")
+fontsize = 64
+myfont = pygame.font.Font(font_path, font_size)
 
 main = True
 
@@ -215,6 +243,8 @@ while main == True:
 
     enemy_list.draw(screen) #refresh enemies
     enemy.move() #move sprite
+
+    stats(player.score) #draw text
 
     pygame.display.flip()
     clock.tick(fps)
