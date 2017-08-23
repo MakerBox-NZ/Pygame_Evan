@@ -54,11 +54,10 @@ class Player(pygame.sprite.Sprite):
         self.momentumX += x
         self.momentumY += y
 
-        def update(self, enemy_list):
-
-            self.score = 0 #set score
-
     def update(self, enemy_list):
+
+        self.score = 0 #set score
+
         #updatespriteposition
         currentX = self.rect.x
         nextX = currentX + self.momentumX
@@ -76,6 +75,7 @@ class Player(pygame.sprite.Sprite):
             self.collide_delta +=6
             self.jump_delta += 6
 
+    
         #collisions
         enemy_hit_list = pygame.sprite.spritecollide(self, enemy_list, False)
         for enemy in enemy_hit_list:
@@ -94,6 +94,9 @@ class Player(pygame.sprite.Sprite):
                 self.rect.y = currentY
                 self.momentumY = 0
                 self.collide_delta = 0 #stopjumping
+
+    def jump (self, platform_list):
+        self.jump_delta = 0
 
     def gravity(self):
         self.momentumY += 3.2 #how fast player fall
@@ -189,9 +192,9 @@ while main == True:
             if event.key == pygame.K_RIGHT:
                 print('right stop')
                 player.control(-movesteps, 0)
-                if event.key == pygame.K_UP:
-                    print('jump stop')
-                    player.jump(platform_list)
+            if event.key == pygame.K_UP:
+                print('jump stop')
+                player.jump(platform_list)
 
 
         if event.type == pygame.KEYDOWN:
