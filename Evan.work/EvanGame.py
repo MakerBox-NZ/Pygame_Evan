@@ -100,7 +100,7 @@ class Player(pygame.sprite.Sprite):
         if self.damage == 1:
             idx = self.rect.collidelist(enemy_hit_list)
             if idx == -1:
-                self.damage = 0 #set damage back to 0
+
                 self.score -= 1 #subtract 1 hp
         
         
@@ -168,10 +168,10 @@ fps = 40
 afps = 4
 clock = pygame.time.Clock()
 pygame.init()
-pygame.font.init() #start free thype
+pygame.font.init() #start free type
 
 font_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "FONTS", "amazdoom.ttf")
-fontsize = 64
+font_size = 64
 myfont = pygame.font.Font(font_path, font_size)
 
 main = True
